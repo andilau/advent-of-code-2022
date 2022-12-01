@@ -1,12 +1,17 @@
 package days
 
 @AdventOfCodePuzzle(
-    name = "Puzzle Name",
-    url = "https://adventofcode.com/2000/day/1",
-    date = Date(day = 1, year = 2000)
+    name = "Calorie Counting",
+    url = "https://adventofcode.com/2022/day/1",
+    date = Date(day = 1, year = 2022)
 )
-class Day1(private val input: List<Int>) : Puzzle {
-    override fun partOne() = input.sum()
+class Day1(input: String) : Puzzle {
 
-    override fun partTwo() = input.foldRight(1) { element, acc -> element * acc }
+    private val caloriesByElf: List<Int> = input
+        .split("\n\n")
+        .map { caloriesString -> caloriesString.split("\n").sumOf { it.toInt() } }
+
+    override fun partOne(): Int = caloriesByElf.max()
+
+    override fun partTwo(): Int = caloriesByElf.sortedDescending().take(3).sum()
 }

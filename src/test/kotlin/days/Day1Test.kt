@@ -7,19 +7,29 @@ import org.junit.jupiter.api.Test
 
 @DisplayName("Day 1")
 class Day1Test {
-    val ints = listOf(1, 2, 3)
+
+    val calories = """
+        1000
+        2000
+        3000
+        
+        4000
+        
+        5000
+        6000
+        
+        7000
+        8000
+        9000
+        
+        10000""".trimIndent()
 
     @Nested
     @DisplayName("Part 1")
     inner class Part1 {
         @Test
-        fun shouldReturnSumOfEmptyList() {
-            assertThat(Day1(emptyList()).partOne()).isEqualTo(0)
-        }
-
-        @Test
-        fun shouldReturnSumOfSimpleList() {
-            assertThat(Day1(ints).partOne()).isEqualTo(6)
+        fun shouldReturnSumOfCaloriesOfMaxCarried() {
+            assertThat(Day1(calories).partOne()).isEqualTo(24000)
         }
     }
 
@@ -27,13 +37,8 @@ class Day1Test {
     @DisplayName("Part 2")
     inner class Part2 {
         @Test
-        fun shouldReturnProductOfEmptyList() {
-            assertThat(Day1(emptyList()).partTwo()).isEqualTo(1)
-        }
-
-        @Test
-        fun shouldReturnProductOfSimpleList() {
-            assertThat(Day1(ints).partTwo()).isEqualTo(6)
+        fun shouldReturnSumOfCaloriesOfTopThree() {
+            assertThat(Day1(calories).partTwo()).isEqualTo(45000)
         }
     }
 }
