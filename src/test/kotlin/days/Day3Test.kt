@@ -30,7 +30,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw""".trimIndent().lines()
     inner class Part2 {
         @Test
         fun shouldSumUpAllRoundsDifferentCalculation() {
-            assertThat(Day3(rucksacks).partTwo()).isEqualTo(0)
+            assertThat(Day3(rucksacks).partTwo()).isEqualTo(70)
         }
     }
 }

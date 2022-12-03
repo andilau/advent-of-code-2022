@@ -11,20 +11,27 @@ class Day3(input: List<String>) : Puzzle {
 
     override fun partOne(): Int = rucksacks.sumOf { it.priority() }
 
-    override fun partTwo(): Int = 0
+    override fun partTwo(): Int = rucksacks.chunked(3)
+        .map { it.map(Rucksack::content).reduce { a, b -> a intersect b }.single().priority() }
+        .sum()
+
+    companion object {
+        private val PRIORITY = ('a'..'z') + ('A'..'Z')
+        fun Char.priority() = PRIORITY.indexOf(this).plus(1)
+    }
 
     data class Rucksack(val line: String) {
+        fun content(): Set<Char> = line.toSet()
 
         fun priority(): Int = line
-            .chunked(line.length / 2).map { it.toSet() }
+            .chunked(line.length / 2)
+            .map { it.toSet() }
             .reduce { a, b -> a intersect b }
-            .map { a -> DICT.indexOf(a) + 1 }
-            .sum()
+            .sumOf { it.priority() }
 
         companion object {
             fun from(line: String): Rucksack = Rucksack(line)
-
-            val DICT = ('a'..'z') + ('A'..'Z')
         }
     }
 }
+

@@ -8,6 +8,7 @@ Based on [aoc-kotlin-starter](https://github.com/hughjdavey/aoc-kotlin-starter) 
 
 - Day 1: 🍪 [Calorie Counting](https://adventofcode.com/2022/day/1) -- [Day1.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day1.kt)
 - Day 2: ✂️ [Rock Paper Scissors](https://adventofcode.com/2022/day/2) -- [Day2.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day2.kt)
+- Day 3: 🎒️ [Rucksack Reorganization](https://adventofcode.com/2022/day/3) -- [Day3.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day3.kt)
 
 ### Features
 
