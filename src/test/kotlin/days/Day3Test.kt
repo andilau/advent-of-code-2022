@@ -20,7 +20,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw""".trimIndent().lines()
     @DisplayName("Part 1")
     inner class Part1 {
         @Test
-        fun shouldSumUpAllRounds() {
+        fun shouldSumAllPrioritiesOfItemsThatAppearsBothCompartmentsOfEachRucksack() {
             assertThat(Day3(rucksacks).partOne()).isEqualTo(157)
         }
     }
@@ -29,7 +29,7 @@ CrZsJsPPZsGzwwsLwLmpwMDw""".trimIndent().lines()
     @DisplayName("Part 2")
     inner class Part2 {
         @Test
-        fun shouldSumUpAllRoundsDifferentCalculation() {
+        fun shouldSumAllBadgeAsPrioritiesOfGroupsOfThreeRucksacks() {
             assertThat(Day3(rucksacks).partTwo()).isEqualTo(70)
         }
     }
