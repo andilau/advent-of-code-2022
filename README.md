@@ -1,22 +1,21 @@
-# Advent of Code Starter
+# Advent of Code 2022
 
-Starter template for solving [Advent of Code](https://adventofcode.com/) in [Kotlin](https://kotlinlang.org/). 
-Advent of Code is an Advent calendar of small programming puzzles by [Eric Wastl](http://was.tl/). 
-Based on [aoc-kotlin-starter](https://github.com/hughjdavey/aoc-kotlin-starter) template by [Hugh Davey](https://github.com/hughjdavey).
+This project contains solutions to the [Advent of Code 2022](https://adventofcode.com/2022) challenge in [Kotlin](https://kotlinlang.org/).
+[Advent of Code](https://adventofcode.com) is an Advent calendar of small programming puzzles by [Eric Wastl](http://was.tl/).
 
 ## Solutions
 
 - Day 1: 🍪 [Calorie Counting](https://adventofcode.com/2022/day/1) -- [Day1.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day1.kt)
 - Day 2: ✂️ [Rock Paper Scissors](https://adventofcode.com/2022/day/2) -- [Day2.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day2.kt)
 - Day 3: 🎒️ [Rucksack Reorganization](https://adventofcode.com/2022/day/3) -- [Day3.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day3.kt)
-- Day 3: ⛺️️ [Camp Cleanup](https://adventofcode.com/2022/day/4) -- [Day4.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day4.kt)
+- Day 4: ⛺️️ [Camp Cleanup](https://adventofcode.com/2022/day/4) -- [Day4.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day4.kt)
 
 ### Features
 
 * Gradle setup so you can run a specific day or all days on the command line (see **Running**)
 * Timings for each part of each day
 * Input for each day automatically exposed in String and List form
-* [Junit 5](https://junit.org/junit5/) and [AssertJ](https://assertj.github.io/doc/) test libraries included (see **Testing**)
+* [JUnit 5](https://junit.org/junit5/) and [AssertJ](https://assertj.github.io/doc/) test libraries included (see **Testing**)
 * Starter .gitignore
 
 ### Running
