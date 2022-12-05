@@ -10,18 +10,16 @@ class Day5(input: List<String>) : Puzzle {
     private val stacks = input
         .takeWhile { it.isNotBlank() }
         .reversed().drop(1)
-        .map { line ->
-            line.indices.filter { (it - 1) % 4 == 0 }.map { line[it] }
-        }
+        .map { line -> line.indices.filter { (it - 1) % 4 == 0 }.map { line[it] } }
         .toStacks()
 
     private val procedures = input
         .dropWhile { it.isNotBlank() }.drop(1)
         .map { line -> Procedure.from(line) }
 
-    override fun partOne(): String = stacks.deepCopy().moveElements { it }.also { println(it) }
+    override fun partOne(): String = stacks.deepCopy().moveElements { it }
 
-    override fun partTwo(): String = stacks.deepCopy().moveElements { it.reversed() }.also { println(it) }
+    override fun partTwo(): String = stacks.deepCopy().moveElements { it.reversed() }
 
     private fun List<List<Char>>.toStacks() =
         (0..this.maxOf { it.lastIndex })
@@ -30,8 +28,8 @@ class Day5(input: List<String>) : Puzzle {
     private fun List<ArrayDeque<Char>>.moveElements(transform: (List<Char>) -> List<Char>) =
         procedures.fold(this) { stacks, p ->
             val (quantity, from, to) = p
-            val mapNotNull: List<Char> = (1..quantity).mapNotNull { stacks[from].removeLastOrNull() }
-            stacks[to].addAll(transform(mapNotNull))
+            val slice: List<Char> = (1..quantity).mapNotNull { stacks[from].removeLastOrNull() }
+            stacks[to].addAll(transform(slice))
             stacks
         }.joinToString("") { it.last().toString() }
 
