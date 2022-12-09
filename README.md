@@ -12,6 +12,7 @@ This project contains solutions to the [Advent of Code 2022](https://adventofcod
 - Day 5: 📦 [Supply Stacks](https://adventofcode.com/2022/day/5) -- [Day5.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day5.kt)
 - Day 6: 📱 [Tuning Trouble](https://adventofcode.com/2022/day/6) -- [Day6.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day6.kt)
 - Day 8: 🌳 [Treetop Tree House](https://adventofcode.com/2022/day/8) -- [Day8.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day8.kt)
+- Day 9: 📿 [Rope Bridge](https://adventofcode.com/2022/day/9) -- [Day9.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day9.kt)
 
 ### Features
 
