@@ -9,34 +9,20 @@ import kotlin.math.sign
 )
 class Day9(val input: List<String>) : Puzzle {
 
-    override fun partOne(): Int = input
+    private val instructions = input
         .map { line -> line.first() to line.substringAfter(' ').toInt() }
-        .path()
-        .followMe()
-        .toSet()
-        .size
 
-    override fun partTwo(): Int = input
-        .map { line -> line.first() to line.substringAfter(' ').toInt() }
-        .path()
-        .followKnots()
-        .toSet()
-        .size
+    override fun partOne(): Int = instructions.path().follow().toSet().size
+
+    override fun partTwo(): Int = instructions.path().followKnots().toSet().size
 
     data class Point(val x: Int, val y: Int) {
 
+        operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+        operator fun minus(other: Point) = Point(x - other.x, y - other.y)
         infix fun adjacent(other: Point) =
             other.x in (this.x - 1..this.x + 1) &&
                     other.y in (this.y - 1..this.y + 1)
-
-        operator fun plus(other: Point) = Point(x + other.x, y + other.y)
-        operator fun minus(other: Point) = Point(x - other.x, y - other.y)
-
-        fun follow(other: Point): Point {
-            val diff = this - other
-            val move = Point(diff.x.sign, diff.y.sign)
-            return other + move
-        }
 
         fun move(dir: Char) = when (dir) {
             'L' -> copy(x = x - 1)
@@ -46,9 +32,14 @@ class Day9(val input: List<String>) : Puzzle {
             else -> error("Check your input $dir")
         }
 
-        override fun toString(): String {
-            return "P($x, $y)"
+        fun moveTo(other: Point): Point {
+            if (other adjacent this) return this
+            val diff = other - this
+            val move = Point(diff.x.sign, diff.y.sign)
+            return this + move
         }
+
+        override fun toString(): String = "P($x, $y)"
 
         companion object {
             val ORIGIN = Point(0, 0)
@@ -66,13 +57,10 @@ class Day9(val input: List<String>) : Puzzle {
         }
     }
 
-    private fun Sequence<Point>.followMe(): Sequence<Point> = sequence {
-        var tail = this@followMe.first()
-        this@followMe.drop(1).forEach { head ->
-            tail = when {
-                tail adjacent head -> tail
-                else -> head.follow(tail)
-            }
+    private fun Sequence<Point>.follow(): Sequence<Point> = sequence {
+        var tail = this@follow.first()
+        this@follow.drop(1).forEach { head ->
+            tail = tail.moveTo(head)
             yield(tail)
         }
     }
@@ -84,14 +72,9 @@ class Day9(val input: List<String>) : Puzzle {
             for ((headIndex, tailIndex) in knots.indices.zipWithNext()) {
                 val h = knots[headIndex]
                 val t = knots[tailIndex]
-                knots[tailIndex] = when {
-                    t adjacent h -> t
-                    else -> h.follow(t)
-                }
+                knots[tailIndex] = t.moveTo(h)
             }
             yield(knots.last())
         }
     }
-
 }
-
