@@ -1,18 +1,23 @@
 package days
 
 @AdventOfCodePuzzle(
-    name = "",
+    name = "No Space Left On Device",
     url = "https://adventofcode.com/2022/day/7",
     date = Date(day = 7, year = 2022)
 )
 class Day7(val input: List<String>) : Puzzle {
 
-    override fun partOne(): Int = dirSizes().values.filter { it <= 100_000 }.sum()
+    private val dirSizes = dirSizes()
 
-    override fun partTwo(): Int = 0
+    override fun partOne(): Int = dirSizes.values.filter { it <= 100_000 }.sum()
+
+    override fun partTwo(): Int {
+        val total = dirSizes.getValue("/")
+        return dirSizes.values.filter { 70_000_000 - (total - it) >= 30_000_000 }.min()
+    }
 
     private fun dirSizes(): Map<String, Int> {
-        val map = mutableMapOf<String, Int>()
+        val map = mutableMapOf<String, Int>("/" to 0)
         var current = ""
         input.forEach { line ->
             when {
@@ -30,9 +35,9 @@ class Day7(val input: List<String>) : Puzzle {
                 }
 
                 line.substringBefore(' ').all { it.isDigit() } -> {
-                    val filesize = line.substringBefore(' ').toInt()
+                    val fileSize = line.substringBefore(' ').toInt()
                     //map.putIfAbsent(current, 0)
-                    map.replaceAll { key, v -> if (current.startsWith(key)) v + filesize else v }
+                    map.replaceAll { key, totalSize -> if (current.startsWith(key)) totalSize + fileSize else totalSize }
 
                 }
             }

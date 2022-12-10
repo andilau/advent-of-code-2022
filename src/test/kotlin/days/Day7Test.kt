@@ -47,8 +47,8 @@ class Day7Test {
     @DisplayName("Part 2")
     inner class Part2 {
         @Test
-        fun `After the rearrangement procedure completes, what crate ends up on top of each stack`() {
-            assertThat(Day7(input).partTwo()).isEqualTo(0)
+        fun `What is the total size of that directory`() {
+            assertThat(Day7(input).partTwo()).isEqualTo(24933642)
         }
     }
 }
