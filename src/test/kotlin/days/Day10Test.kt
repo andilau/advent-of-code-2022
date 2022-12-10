@@ -23,19 +23,13 @@ class Day10Test {
     @Nested
     @DisplayName("Part 2")
     inner class Part2 {
-        private val input = """
-        R 5
-        U 8
-        L 8
-        D 3
-        R 17
-        D 10
-        L 25
-        U 20""".trimIndent().lines()
+
 
         @Test
-        fun `How many positions does the tail of the rope visit at least once`() {
-            assertThat(Day9(input).partTwo()).isEqualTo(36)
+        fun `What eight capital letters appear on your CRT`() {
+            val actual = Day10(largerProgram).partTwo()
+            assertThat(actual).isNotEmpty
+            println("${actual.map { if (it) '#' else '.' }.joinToString("").chunked(40).joinToString("\n")}")
         }
     }
 

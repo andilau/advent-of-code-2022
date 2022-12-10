@@ -12,7 +12,7 @@ class Day10(val input: List<String>) : Puzzle {
 
     private val cycles = setOf<Int>(20, 60, 100, 140, 180, 220)
 
-    override fun partOne():Int {
+    override fun partOne(): Int {
         var cycle = 1
         var regX = 1
         var sum = 0
@@ -20,18 +20,44 @@ class Day10(val input: List<String>) : Puzzle {
             when (op) {
                 "addx" -> {
                     repeat(2) {
-                        if (cycle in cycles)  sum += cycle * regX.also { println("$cycle: $regX") }
+                        if (cycle in cycles) sum += cycle * regX.also { println("$cycle: $regX") }
                         cycle++;
                     }
                     regX += v
                 }
+
                 "noop" -> {
-                    if (cycle in cycles)  sum += cycle * regX.also { println("$cycle: $regX") }
-                    cycle += 1}
+                    if (cycle in cycles) sum += cycle * regX.also { println("$cycle: $regX") }
+                    cycle++
+                }
             }
         }
         return sum
     }
 
-    override fun partTwo(): Int = 0
+    override fun partTwo(): BooleanArray {
+        val crt = BooleanArray(240)
+        assert(crt.size == 240)
+        var cycle = 1
+        var regX = 1
+        for ((op, v) in instructions) {
+            when (op) {
+                "addx" -> {
+                    repeat(2) {
+                        crt[cycle - 1] = (cycle - 1) % 40 in (regX - 1)..(regX + 1)
+                        cycle++
+                    }
+                    regX += v
+                }
+
+                "noop" -> {
+                    crt[cycle - 1] = (cycle - 1) % 40 in (regX - 1)..(regX + 1)
+                    cycle++
+                }
+            }
+        }
+        println("${crt.map { if (it) '#' else '.' }.joinToString("").chunked(40).joinToString("\n")}")
+
+        return crt
+    }
 }
