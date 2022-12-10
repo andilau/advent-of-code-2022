@@ -18,6 +18,7 @@ class SolutionsTest {
         Day7(InputReader.getInputAsList(7)) to Pair(1845346, 3636703),
         Day8(InputReader.getInputAsList(8)) to Pair(1816, 383520),
         Day9(InputReader.getInputAsList(9)) to Pair(6354, 2651),
+        Day10(InputReader.getInputAsList(10)) to Pair(14760, EFGERURE),
     )
         .map { (day, answers) ->
             DynamicTest.dynamicTest("${day.javaClass.simpleName} -> ${answers.first} / ${answers.second}") {
@@ -25,4 +26,12 @@ class SolutionsTest {
                 assertThat(day.partTwo()).isEqualTo(answers.second)
             }
         }
+
+    private val EFGERURE = """
+        ####.####..##..####.###..#..#.###..####.
+        #....#....#..#.#....#..#.#..#.#..#.#....
+        ###..###..#....###..#..#.#..#.#..#.###..
+        #....#....#.##.#....###..#..#.###..#....
+        #....#....#..#.#....#.#..#..#.#.#..#....
+        ####.#.....###.####.#..#..##..#..#.####.""".trimIndent()
 }
