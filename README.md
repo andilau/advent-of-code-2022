@@ -11,6 +11,7 @@ This project contains solutions to the [Advent of Code 2022](https://adventofcod
 - Day 4: ⛺️️ [Camp Cleanup](https://adventofcode.com/2022/day/4) -- [Day4.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day4.kt)
 - Day 5: 📦 [Supply Stacks](https://adventofcode.com/2022/day/5) -- [Day5.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day5.kt)
 - Day 6: 📱 [Tuning Trouble](https://adventofcode.com/2022/day/6) -- [Day6.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day6.kt)
+- Day 7: 💾 [No Space Left On Device](https://adventofcode.com/2022/day/7) -- [Day7.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day7.kt)
 - Day 8: 🌳 [Treetop Tree House](https://adventofcode.com/2022/day/8) -- [Day8.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day8.kt)
 
 ### Features
