@@ -23,13 +23,18 @@ class Day10Test {
     @Nested
     @DisplayName("Part 2")
     inner class Part2 {
-
+        private val expected = """
+            ##..##..##..##..##..##..##..##..##..##..
+            ###...###...###...###...###...###...###.
+            ####....####....####....####....####....
+            #####.....#####.....#####.....#####.....
+            ######......######......######......####
+            #######.......#######.......#######.....""".trimIndent()
 
         @Test
         fun `What eight capital letters appear on your CRT`() {
             val actual = Day10(largerProgram).partTwo()
-            assertThat(actual).isNotEmpty
-            println("${actual.map { if (it) '#' else '.' }.joinToString("").chunked(40).joinToString("\n")}")
+            assertThat(actual).isEqualTo(expected)
         }
     }
 

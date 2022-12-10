@@ -20,14 +20,13 @@ class Day10(val input: List<String>) : Puzzle {
             when (op) {
                 "addx" -> {
                     repeat(2) {
-                        if (cycle in cycles) sum += cycle * regX.also { println("$cycle: $regX") }
+                        if (cycle in cycles) sum += cycle * regX
                         cycle++;
                     }
                     regX += v
                 }
-
                 "noop" -> {
-                    if (cycle in cycles) sum += cycle * regX.also { println("$cycle: $regX") }
+                    if (cycle in cycles) sum += cycle * regX
                     cycle++
                 }
             }
@@ -35,13 +34,16 @@ class Day10(val input: List<String>) : Puzzle {
         return sum
     }
 
-    override fun partTwo(): BooleanArray {
+    override fun partTwo(): String {
         val crt = BooleanArray(240)
-        assert(crt.size == 240)
         var cycle = 1
         var regX = 1
         for ((op, v) in instructions) {
             when (op) {
+                "noop" -> {
+                    crt[cycle - 1] = (cycle - 1) % 40 in (regX - 1)..(regX + 1)
+                    cycle++
+                }
                 "addx" -> {
                     repeat(2) {
                         crt[cycle - 1] = (cycle - 1) % 40 in (regX - 1)..(regX + 1)
@@ -49,15 +51,8 @@ class Day10(val input: List<String>) : Puzzle {
                     }
                     regX += v
                 }
-
-                "noop" -> {
-                    crt[cycle - 1] = (cycle - 1) % 40 in (regX - 1)..(regX + 1)
-                    cycle++
-                }
             }
         }
-        println("${crt.map { if (it) '#' else '.' }.joinToString("").chunked(40).joinToString("\n")}")
-
-        return crt
+        return crt.map { if (it) '#' else '.' }.joinToString("").chunked(40).joinToString("\n")
     }
 }
