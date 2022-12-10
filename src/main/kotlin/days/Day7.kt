@@ -36,13 +36,10 @@ class Day7(val input: List<String>) : Puzzle {
 
                 line.substringBefore(' ').all { it.isDigit() } -> {
                     val fileSize = line.substringBefore(' ').toInt()
-                    //map.putIfAbsent(current, 0)
                     map.replaceAll { key, totalSize -> if (current.startsWith(key)) totalSize + fileSize else totalSize }
-
                 }
             }
         }
         return map
     }
-
 }
