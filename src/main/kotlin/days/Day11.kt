@@ -7,19 +7,14 @@ package days
 )
 class Day11(val input: String) : Puzzle {
 
-    private val monkeys1 = input.split("\n\n").map { Monkey.from(it.lines()) }
-    private val monkeys2 = input.split("\n\n").map { Monkey.from(it.lines()) }
+    private val monkeys = input.split("\n\n").map { Monkey.from(it.lines()) }
 
-    override fun partOne(): Int = monkeys1.toList().run(20, 3).twoMostActiveMnkeysInspectedMultiplied().toInt()
-
-    override fun partTwo(): Long = monkeys2.toList().run(10_000, 1).twoMostActiveMnkeysInspectedMultiplied()
-
-    private fun List<Monkey>.twoMostActiveMnkeysInspectedMultiplied() =
-        map { it.inspected.toLong() }.sortedByDescending { it }.take(2).reduce { a, b -> a * b }
+    override fun partOne(): Int = monkeys.deepCopy().run(20, 3).twoMostActiveMnkeysInspectedMultiplied().toInt()
+    override fun partTwo(): Long = monkeys.deepCopy().run(10_000, 1).twoMostActiveMnkeysInspectedMultiplied()
 
     private fun List<Monkey>.run(times: Int, relief: Int): List<Monkey> {
         val monkeys = this
-        val lcm = this.map { it.test.toLong() }.let { divisors->
+        val lcm = this.map { it.test.toLong() }.let { divisors ->
             lcm(divisors[0], divisors[1], divisors.drop(2))
         }
         repeat(times) { _ ->
@@ -40,6 +35,11 @@ class Day11(val input: String) : Puzzle {
         }
         return monkeys
     }
+
+    private fun List<Monkey>.twoMostActiveMnkeysInspectedMultiplied() =
+        map { it.inspected.toLong() }.sortedByDescending { it }.take(2).reduce { a, b -> a * b }
+
+    private fun List<Monkey>.deepCopy() = map { it.copy(items = ArrayDeque(it.items)) }
 
     data class Monkey(
         val id: Int,
