@@ -18,4 +18,11 @@ fun neighborsAndSelf(x: Int, y: Int) =
         }
     }
 
-data class Point(val x: Int, val y: Int)
+data class Point(val x: Int, val y: Int) {
+    fun neighbours() = setOf(
+            copy(x=x+1),
+            copy(y=y+1),
+            copy(x=x-1),
+            copy(y=y-1),
+        )
+}
