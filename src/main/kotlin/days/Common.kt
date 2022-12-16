@@ -2,7 +2,8 @@ package days
 
 fun lcm(x: Long, y: Long, vararg ints: Long): Long =
     ints.fold(x * y / gcd(x, y)) { acc, z -> lcm(acc, z) }
-fun lcm(x: Long, y: Long,  ints: List<Long>): Long =
+
+fun lcm(x: Long, y: Long, ints: List<Long>): Long =
     ints.fold(x * y / gcd(x, y)) { acc, z -> lcm(acc, z) }
 
 fun gcd(a: Long, b: Long): Long {
@@ -16,3 +17,12 @@ fun neighborsAndSelf(x: Int, y: Int) =
             Pair(dx, dy)
         }
     }
+
+data class Point(val x: Int, val y: Int) {
+    fun neighbours() = setOf(
+            copy(x=x+1),
+            copy(y=y+1),
+            copy(x=x-1),
+            copy(y=y-1),
+        )
+}
