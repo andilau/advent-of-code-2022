@@ -25,8 +25,8 @@ class Day14Test {
     inner class Part2 {
 
         @Test
-        fun `What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal`() {
-            assertThat(Day14(map).partTwo()).isEqualTo(29)
+        fun `How many units of sand come to rest`() {
+            assertThat(Day14(map).partTwo()).isEqualTo(93)
         }
     }
 }
