@@ -31,6 +31,8 @@ by [Eric Wastl](http://was.tl/).
   -- [Day11.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day11.kt)
 - Day 12: ⛰ [Hill Climbing Algorithm](https://adventofcode.com/2022/day/12)
   -- [Day12.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day12.kt)
+- Day 14: ⏳ [Regolith Reservoir](https://adventofcode.com/2022/day/14)
+  -- [Day14.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day14.kt)
 
 ### Features
 
