@@ -7,13 +7,12 @@ package days
 )
 class Day14(walls: List<String>) : Puzzle {
     private val cave = createCave(walls)
+    private val source = Point.from("500,0")
+    private val bottom = cave.maxOf { it.y }
 
-    private val start = Point.from("500,0")
-    private val abyssBegins = cave.maxOf { it.y }
+    override fun partOne() = cave.fillSand(finishWhen = { it.y >= bottom })
 
-    override fun partOne() = cave.fillSand(abyssBegins)
-
-    override fun partTwo() = cave.fillSand(abyssBegins + 3) { p -> p.y > abyssBegins }
+    override fun partTwo() = cave.fillSand(restWhen = { it.y > bottom }, finishWhen = { it == source })
 
     private fun createCave(walls: List<String>) = walls.flatMap {
         it.split(" -> ")
@@ -22,26 +21,27 @@ class Day14(walls: List<String>) : Puzzle {
             .flatMap { (from, to) -> from.lineto(to) }
     }.toSet()
 
-    private fun Set<Point>.fillSand(abyss: Int, alsoStop: (Point) -> Boolean = { false }): Int {
-        val occ = this.toMutableSet()
+    private fun Set<Point>.fillSand(
+        restWhen: (Point) -> Boolean = { false },
+        finishWhen: (Point) -> Boolean = { false }
+    ): Int {
         var sandAtRest = 0
+        val occupied = this.toMutableSet()
         while (true) {
-            var current = start
+            var current = source
             while (true) {
                 val next = sequenceOf(current.down(), current.downLeft(), current.downRight())
-                    .firstOrNull { it !in occ }
+                    .firstOrNull { it !in occupied }
 
                 when {
-                    next == null || alsoStop(current) -> {
-                        occ += current
+                    next == null || restWhen(current) -> {
+                        occupied += current
                         sandAtRest++
-                        if (current == start) return sandAtRest
-                        break
+                        if (finishWhen(current)) return sandAtRest
+                        else break
                     }
 
-                    next.y >= abyss -> {
-                        return sandAtRest
-                    }
+                    finishWhen(next) -> return sandAtRest
 
                     else -> current = next
                 }
