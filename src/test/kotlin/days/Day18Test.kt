@@ -6,17 +6,34 @@ import org.junit.jupiter.api.*
 @DisplayName("Day 18")
 class Day18Test {
 
-    private val map = """
-        498,4 -> 498,6 -> 496,6
-        503,4 -> 502,4 -> 502,9 -> 494,9""".trimIndent().lines()
+    private val example = """
+        2,2,2
+        1,2,2
+        3,2,2
+        2,1,2
+        2,3,2
+        2,2,1
+        2,2,3
+        2,2,4
+        2,2,6
+        1,2,5
+        3,2,5
+        2,1,5
+        2,3,5""".trimIndent().lines()
 
     @Nested
     @DisplayName("Part 1")
     inner class Part1 {
 
         @Test
-        fun `How many units of sand come to rest before sand starts flowing into the abyss below`() {
-            assertThat(Day18(map).partOne()).isEqualTo(24)
+        fun `What is the surface area`() {
+            val droplets = listOf("1,1,1", "2,1,1")
+            assertThat(Day18(droplets).partOne()).isEqualTo(10)
+        }
+
+        @Test
+        fun `What is the surface area of your scanned lava droplet`() {
+            assertThat(Day18(example).partOne()).isEqualTo(64)
         }
     }
 
@@ -25,8 +42,8 @@ class Day18Test {
     inner class Part2 {
 
         @Test
-        fun `How many units of sand come to rest`() {
-            assertThat(Day18(map).partTwo()).isEqualTo(93)
+        fun `What is the exterior surface area of your scanned lava droplet`() {
+            assertThat(Day18(example).partTwo()).isEqualTo(58)
         }
     }
 }
