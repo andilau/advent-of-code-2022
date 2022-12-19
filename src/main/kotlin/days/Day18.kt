@@ -7,20 +7,13 @@ package days
 )
 class Day18(input: List<String>) : Puzzle {
 
-    private val droplets = input.map(Point3D::from)
-    // 1,1,1 and 2,1,1
-    // XX = 2*2 + 2*2 + 2*1 = 10
+    private val droplets = input.map(Point3D::from).toSet()
 
-    override fun partOne(): Int {
-        var sides = 0
-        (0 until droplets.lastIndex).forEach { ix ->
-            (ix + 1..droplets.lastIndex)
-                .forEach { iy -> if (droplets[iy] in droplets[ix].neighbors()) sides++ }
-        }
-        return 6 * droplets.size - sides * 2
+    override fun partOne() = droplets.sumOf { (it.neighbors() subtract droplets).count() }
+
+    override fun partTwo(): Int {
+        return 0
     }
-
-    override fun partTwo() = 0
 
     data class Point3D(val x: Int, val y: Int, val z: Int) {
 
@@ -33,7 +26,6 @@ class Day18(input: List<String>) : Puzzle {
         companion object {
             fun from(line: String) =
                 line.split(",").map(String::toInt).let { (x, y, z) -> Point3D(x, y, z) }
-
         }
     }
 }
