@@ -7,20 +7,25 @@ import org.junit.jupiter.api.*
 class Day23Test {
 
     private val example = """
-        ....#..
-        ..###.#
-        #...#.#
-        .#...##
-        #.###..
-        ##.#.##
-        .#..#..""".trimIndent().lines()
+        ..............
+        ..............
+        .......#......
+        .....###.#....
+        ...#...#.#....
+        ....#...##....
+        ...#.###......
+        ...##.#.##....
+        ....#..#......
+        ..............
+        ..............
+        ..............""".trimIndent().lines()
 
     @Nested
     @DisplayName("Part 1")
     inner class Part1 {
 
         @Test
-        fun `What is the surface area of your scanned lava droplet`() {
+        fun `How many empty ground tiles does that rectangle contain`() {
             assertThat(Day23(example).partOne()).isEqualTo(110)
         }
     }
@@ -30,8 +35,8 @@ class Day23Test {
     inner class Part2 {
 
         @Test
-        fun `What is the exterior surface area of your scanned lava droplet`() {
-            assertThat(Day18(example).partTwo()).isEqualTo(58)
+        fun `What is the number of the first round where no Elf moves`() {
+            assertThat(Day23(example).partTwo()).isEqualTo(20)
         }
     }
 }

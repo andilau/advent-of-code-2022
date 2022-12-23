@@ -21,11 +21,32 @@ fun neighborsAndSelf(x: Int, y: Int) =
     }
 
 data class Point(val x: Int, val y: Int) {
+
+    val north: Point get() = this.copy(y = y - 1)
+    val northwest: Point get() = this + Point(-1, -1)
+    val northeast: Point get() = this + Point(1, -1)
+    val south: Point get() = this + Point(0, 1)
+    val southwest: Point get() = this + Point(-1, 1)
+    val southeast: Point get() = this + Point(1, 1)
+    val west: Point get() = this + Point(-1, 0)
+    val east: Point get() = this + Point(1, 0)
+
     fun neighbours() = setOf(
         copy(x = x + 1),
         copy(y = y + 1),
         copy(x = x - 1),
         copy(y = y - 1),
+    )
+
+    fun neighboursAll() = setOf(
+        copy(x = x + 1),
+        copy(x = x - 1),
+        copy(x = x + 1, y = y - 1),
+        copy(x = x + 1, y = y + 1),
+        copy(y = y + 1),
+        copy(y = y - 1),
+        copy(x = x - 1, y = y - 1),
+        copy(x = x - 1, y = y + 1),
     )
 
     fun lineto(to: Point): Sequence<Point> {
@@ -38,9 +59,9 @@ data class Point(val x: Int, val y: Int) {
         }
     }
 
-    private operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+    operator fun plus(other: Point) = Point(x + other.x, y + other.y)
     override fun toString(): String {
-        return "P($x, $y)"
+        return "P($x,$y)"
     }
 
     companion object {
@@ -52,5 +73,13 @@ data class Point(val x: Int, val y: Int) {
 }
 
 fun List<String>.extract(char: Char): Set<Point> {
-    return this.flatMapIndexed() { y, row -> row.mapIndexedNotNull { x, c -> if (c == char) Point(x, y) else null } }.toSet()
+    return this.flatMapIndexed() { y, row -> row.mapIndexedNotNull { x, c -> if (c == char) Point(x, y) else null } }
+        .toSet()
+}
+
+fun Set<Point>.draw() {
+    (minOf { it.y }..maxOf { it.y }).forEach { y ->
+        (minOf { it.x }..maxOf { it.x }).map { x -> if (Point(x, y) in this) '#' else '.' }.joinToString("")
+            .also { println(it) }
+    }
 }
