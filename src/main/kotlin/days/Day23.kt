@@ -52,9 +52,9 @@ class Day23(input: List<String>) : Puzzle {
                 ) propose.compute(elf.east) { _, l -> if (l == null) listOf(elf) else l + elf }.also { moved = true }
             }
         }
-        propose.filterValues { it.size == 1 }.forEach { (new, from) ->
-            elfs += new
-            elfs -= from.first()
+        propose.filterValues { it.size == 1 }.forEach { (to, from) ->
+            elfs += to
+            elfs -= from.single()
         }
         return elfs.toSet()
     }
