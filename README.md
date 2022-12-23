@@ -35,6 +35,8 @@ by [Eric Wastl](http://was.tl/).
   -- [Day14.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day14.kt)
 - Day 18: 🍩 [Boiling Boulders](https://adventofcode.com/2022/day/18)
   -- [Day18.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day18.kt)
+- Day 23: 🌱 [Unstable Diffusion](https://adventofcode.com/2022/day/23)
+  -- [Day23.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day23.kt)
 
 ### Features
 
