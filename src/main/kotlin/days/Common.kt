@@ -50,3 +50,7 @@ data class Point(val x: Int, val y: Int) {
             .let { (x, y) -> Point(x, y) }
     }
 }
+
+fun List<String>.extract(char: Char): Set<Point> {
+    return this.flatMapIndexed() { y, row -> row.mapIndexedNotNull { x, c -> if (c == char) Point(x, y) else null } }.toSet()
+}
