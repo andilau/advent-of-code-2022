@@ -60,6 +60,9 @@ data class Point(val x: Int, val y: Int) {
     }
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+
+    operator fun times(value: Int) = Point(x * value, y * value)
+
     override fun toString(): String {
         return "P($x,$y)"
     }
@@ -71,6 +74,8 @@ data class Point(val x: Int, val y: Int) {
             .let { (x, y) -> Point(x, y) }
     }
 }
+
+operator fun Int.times(vector: Point) = vector.times(this)
 
 fun List<String>.extract(char: Char): Set<Point> {
     return this.flatMapIndexed() { y, row -> row.mapIndexedNotNull { x, c -> if (c == char) Point(x, y) else null } }
