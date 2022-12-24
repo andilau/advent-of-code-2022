@@ -13,9 +13,9 @@ fun gcd(a: Long, b: Long): Long {
     return gcd(b, a % b)
 }
 
-fun neighborsAndSelf(x: Int, y: Int) =
-    (x..y).flatMap { dy ->
-        (x..y).map { dx ->
+fun pairs(intRange: IntRange): List<Pair<Int, Int>> =
+    intRange.flatMap { dy ->
+        intRange.map { dx ->
             Pair(dx, dy)
         }
     }
@@ -68,7 +68,7 @@ data class Point(val x: Int, val y: Int) {
     }
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
-
+    operator fun minus(other: Point) = Point(x - other.x, y - other.y)
     operator fun times(value: Int) = Point(x * value, y * value)
 
     override fun toString(): String {

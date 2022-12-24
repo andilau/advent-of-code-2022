@@ -4,7 +4,6 @@ import days.Point.Companion.EAST
 import days.Point.Companion.NORTH
 import days.Point.Companion.SOUTH
 import days.Point.Companion.WEST
-import java.util.*
 import kotlin.collections.ArrayDeque
 
 @AdventOfCodePuzzle(
@@ -15,26 +14,23 @@ import kotlin.collections.ArrayDeque
 class Day24(input: List<String>) : Puzzle {
 
     private val walls = input.extract('#')
-    val max = Point(walls.maxOf { it.x }, walls.maxOf { it.y })
+    private val max = Point(walls.maxOf { it.x }, walls.maxOf { it.y })
+    private val start = point(0) ?: error("No start found")
+    private val exit = point(max.y) ?: error("No exit found")
+
+    private fun point(y: Int) = (0..max.x).map { x -> Point(x, y) }.firstOrNull() { it !in walls }
 
     private val blizzardsWest = input.extract('<')
     private val blizzardsEast = input.extract('>')
     private val blizzardsNorth = input.extract('^')
     private val blizzardsSouth = input.extract('v')
-    private val start = (0..walls.maxOf { it.x }).map { x -> Point(x, 0) }.firstOrNull() { it !in walls }
-        ?: error("No start found")
-
-    private val exit =
-        (0..walls.maxOf { it.x }).map { x -> Point(x, walls.maxOf { it.y }) }.firstOrNull() { it !in walls }
-            ?: error("No exit found")
 
     private fun Set<Point>.move(round: Int, vector: Point, max: Point) =
         map { it + round * vector }
-            .map { p ->
-                Point(((p.x - 1).mod(max.x - 1)) + 1, ((p.y - 1).mod(max.y - 1)) + 1)
-            }.toSet()
+            .map { Point((it.x - 1).mod(max.x - 1) + 1, (it.y - 1).mod(max.y - 1) + 1) }
+            .toSet()
 
-    private val WALLS = List((max.x - 2) * (max.y - 2), ::computeWalls)
+    private val obstacles = List((max.x - 2) * (max.y - 2), ::computeObstacles)
     override fun partOne() = partOne(listOf(exit))
 
     override fun partTwo() = partOne(listOf(exit, start, exit))
@@ -49,7 +45,7 @@ class Day24(input: List<String>) : Puzzle {
             //a.size.compareTo(b.size)
             //a.distanceToExit(exit).compareTo(b.distanceToExit(exit)) }
             .apply { add(listOf(start)) }
-        walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
+        //walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
 
         val seen = mutableSetOf<State>()
         while (queue.isNotEmpty()) {
@@ -59,7 +55,7 @@ class Day24(input: List<String>) : Puzzle {
             if (route.last() == exit && remains.isNotEmpty()) {
                 exit = remains.removeAt(0)
                 queue.clear()
-                seen.clear()
+                //seen.clear()
                 println("exit = $exit $remains -> ${route.size}")
             }
 
@@ -68,30 +64,23 @@ class Day24(input: List<String>) : Puzzle {
             seen += state
 
             val time = route.size // 1
-
-            val wall = WALLS[time % ((max.x - 2) * (max.y - 2))]
+            val wall = obstacles[time % ((max.x - 2) * (max.y - 2))]
 
             route.last().neighboursAndSelf()
-                .filter { it !in wall }
                 .filter { it.y in 0..max.y }
+                .filter { it !in wall }
                 .forEach { queue.add(route + it) }
         }
         error("Path not found")
     }
 
-    private fun computeWalls(time: Int): Set<Point> {
+    private fun computeObstacles(time: Int): Set<Point> {
         val moveW = blizzardsWest.move(time, WEST, max)
         val moveE = blizzardsEast.move(time, EAST, max)
         val moveN = blizzardsNorth.move(time, NORTH, max)
         val moveS = blizzardsSouth.move(time, SOUTH, max)
-        //walls.draw(moveW, moveE, moveN, moveS)
         return walls + moveW + moveE + moveN + moveS
     }
-
-    private fun Set<Point>.area() =
-        (maxOf { it.x } - minOf { it.x } + 1) * (maxOf { it.y } - minOf { it.y } + 1)
-
-    private operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
 
     private fun Set<Point>.draw(west: Set<Point>, east: Set<Point>, north: Set<Point>, south: Set<Point>) {
         (minOf { it.y }..maxOf { it.y }).forEach { y ->
@@ -106,6 +95,4 @@ class Day24(input: List<String>) : Puzzle {
                 .also { println(it) }
         }
     }
-
 }
-
