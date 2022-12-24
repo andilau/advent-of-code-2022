@@ -75,7 +75,7 @@ class Day24Test {
 
         @Test
         fun `What is the number of the first round where no Elf moves`() {
-            assertThat(Day24(example).partTwo()).isEqualTo(20)
+            assertThat(Day24(example).partTwo()).isEqualTo(54)
         }
     }
 }

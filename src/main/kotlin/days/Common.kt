@@ -31,6 +31,14 @@ data class Point(val x: Int, val y: Int) {
     val west: Point get() = this + Point(-1, 0)
     val east: Point get() = this + Point(1, 0)
 
+    fun neighboursAndSelf(): Set<Point> = setOf(
+        copy(),
+        copy(x = x + 1),
+        copy(y = y + 1),
+        copy(x = x - 1),
+        copy(y = y - 1),
+    )
+
     fun neighbours() = setOf(
         copy(x = x + 1),
         copy(y = y + 1),
@@ -68,6 +76,11 @@ data class Point(val x: Int, val y: Int) {
     }
 
     companion object {
+        val WEST = Point(-1, 0)
+        val EAST = Point(1, 0)
+        val NORTH = Point(0, -1)
+        val SOUTH = Point(0, 1)
+
         fun from(line: String) = line
             .split(",")
             .map(String::toInt)

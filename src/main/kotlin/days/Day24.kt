@@ -1,6 +1,11 @@
 package days
 
-import java.util.PriorityQueue
+import days.Point.Companion.EAST
+import days.Point.Companion.NORTH
+import days.Point.Companion.SOUTH
+import days.Point.Companion.WEST
+import java.util.*
+import kotlin.collections.ArrayDeque
 
 @AdventOfCodePuzzle(
     name = "Blizzard Basin",
@@ -8,10 +13,6 @@ import java.util.PriorityQueue
     date = Date(day = 24, year = 2022)
 )
 class Day24(input: List<String>) : Puzzle {
-    val WEST = Point(-1, 0)
-    val EAST = Point(1, 0)
-    val NORTH = Point(0, -1)
-    val SOUTH = Point(0, 1)
 
     private val walls = input.extract('#')
     val max = Point(walls.maxOf { it.x }, walls.maxOf { it.y })
@@ -22,17 +23,18 @@ class Day24(input: List<String>) : Puzzle {
     private val blizzardsSouth = input.extract('v')
     private val start = (0..walls.maxOf { it.x }).map { x -> Point(x, 0) }.firstOrNull() { it !in walls }
         ?: error("No start found")
+
     private val exit =
         (0..walls.maxOf { it.x }).map { x -> Point(x, walls.maxOf { it.y }) }.firstOrNull() { it !in walls }
             ?: error("No exit found")
-    val WALLS = mutableMapOf<Int, Set<Point>>()
+
     private fun Set<Point>.move(round: Int, vector: Point, max: Point) =
         map { it + round * vector }
             .map { p ->
                 Point(((p.x - 1).mod(max.x - 1)) + 1, ((p.y - 1).mod(max.y - 1)) + 1)
-            }
-            .toSet()
+            }.toSet()
 
+    private val WALLS = List((max.x - 2) * (max.y - 2), ::computeWalls)
     override fun partOne() = partOne(listOf(exit))
 
     override fun partTwo() = partOne(listOf(exit, start, exit))
@@ -43,20 +45,22 @@ class Day24(input: List<String>) : Puzzle {
         val remains = dest.toMutableList()
         var exit = remains.removeAt(0)
 
-        val queue = PriorityQueue<List<Point>>() { a, b ->
-            a.size.compareTo(b.size)
-            //a.distanceToExit(exit).compareTo(b.distanceToExit(exit))
-        }.apply { add(listOf(start)) }
+        val queue = ArrayDeque<List<Point>>() //{ a, b ->
+            //a.size.compareTo(b.size)
+            //a.distanceToExit(exit).compareTo(b.distanceToExit(exit)) }
+            .apply { add(listOf(start)) }
         walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
 
         val seen = mutableSetOf<State>()
         while (queue.isNotEmpty()) {
-            val route: List<Point> = queue.poll()
+            val route: List<Point> = queue.removeFirst()
 
             if (route.last() == exit && remains.isEmpty()) return route.size - 1
             if (route.last() == exit && remains.isNotEmpty()) {
                 exit = remains.removeAt(0)
-                println("exit = $exit $remains")
+                queue.clear()
+                seen.clear()
+                println("exit = $exit $remains -> ${route.size}")
             }
 
             val state = State(route.last(), route.size % ((max.x - 2) * (max.y - 2)), remains)
@@ -64,14 +68,8 @@ class Day24(input: List<String>) : Puzzle {
             seen += state
 
             val time = route.size // 1
-            val wall = WALLS.getOrPut(time) {
-                val moveW = blizzardsWest.move(time, WEST, max)
-                val moveE = blizzardsEast.move(time, EAST, max)
-                val moveN = blizzardsNorth.move(time, NORTH, max)
-                val moveS = blizzardsSouth.move(time, SOUTH, max)
-                //walls.draw(moveW, moveE, moveN, moveS)
-                walls + moveW + moveE + moveN + moveS
-            }
+
+            val wall = WALLS[time % ((max.x - 2) * (max.y - 2))]
 
             route.last().neighboursAndSelf()
                 .filter { it !in wall }
@@ -79,6 +77,15 @@ class Day24(input: List<String>) : Puzzle {
                 .forEach { queue.add(route + it) }
         }
         error("Path not found")
+    }
+
+    private fun computeWalls(time: Int): Set<Point> {
+        val moveW = blizzardsWest.move(time, WEST, max)
+        val moveE = blizzardsEast.move(time, EAST, max)
+        val moveN = blizzardsNorth.move(time, NORTH, max)
+        val moveS = blizzardsSouth.move(time, SOUTH, max)
+        //walls.draw(moveW, moveE, moveN, moveS)
+        return walls + moveW + moveE + moveN + moveS
     }
 
     private fun Set<Point>.area() =
@@ -102,5 +109,3 @@ class Day24(input: List<String>) : Puzzle {
 
 }
 
-
-private fun Point.neighboursAndSelf(): Set<Point> = this.neighbours() + this
