@@ -31,27 +31,30 @@ class Day24(input: List<String>) : Puzzle {
             .toSet()
 
     private val obstacles = List((max.x - 2) * (max.y - 2), ::computeObstacles)
-    override fun partOne() = partOne(listOf(exit))
 
-    override fun partTwo() = partOne(listOf(exit, start, exit))
+    override fun partOne() = partOne(listOf(exit)).also { println(it) }.lastIndex
 
-    fun partOne(dest: List<Point>): Int {
+    override fun partTwo() = partOne(listOf(exit, start, exit)).lastIndex
+
+    fun partOne(dest: List<Point>): List<Point> {
         data class State(val current: Point, val time: Int, val rem: List<Point>)
 
         val remains = dest.toMutableList()
         var exit = remains.removeAt(0)
 
         val queue = ArrayDeque<List<Point>>() //{ a, b ->
-            //a.size.compareTo(b.size)
-            //a.distanceToExit(exit).compareTo(b.distanceToExit(exit)) }
             .apply { add(listOf(start)) }
-        //walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
 
+        //walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
         val seen = mutableSetOf<State>()
         while (queue.isNotEmpty()) {
             val route: List<Point> = queue.removeFirst()
 
-            if (route.last() == exit && remains.isEmpty()) return route.size - 1
+            val state = State(route.last(), route.size % ((max.x - 2) * (max.y - 2)), remains)
+            if (state in seen) continue
+            seen += state
+
+            if (route.last() == exit && remains.isEmpty()) return route
             if (route.last() == exit && remains.isNotEmpty()) {
                 exit = remains.removeAt(0)
                 queue.clear()
@@ -59,9 +62,6 @@ class Day24(input: List<String>) : Puzzle {
                 println("exit = $exit $remains -> ${route.size}")
             }
 
-            val state = State(route.last(), route.size % ((max.x - 2) * (max.y - 2)), remains)
-            if (state in seen) continue
-            seen += state
 
             val time = route.size // 1
             val wall = obstacles[time % ((max.x - 2) * (max.y - 2))]

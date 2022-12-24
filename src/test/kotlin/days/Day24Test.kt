@@ -8,44 +8,16 @@ import kotlin.text.Typography.times
 class Day24Test {
 
     private val example = """
-#.######
-#>>.<^<#
-#.<..<<#
-#>v.><>#
-#<^v^^>#
-######.#""".trimIndent().lines()
+        #.######
+        #>>.<^<#
+        #.<..<<#
+        #>v.><>#
+        #<^v^^>#
+        ######.#""".trimIndent().lines()
 
     @Nested
     @DisplayName("Part 1")
     inner class Part1 {
-
-        @Test
-        fun `1What is the fewest number of minutes required to avoid the blizzards and reach the goal`() {
-            val example = """
-                #.#####
-                #...v.#
-                #..>..#
-                #.....#
-                #.....#
-                #.....#
-                #####.#""".trimIndent().lines()
-
-            assertThat(Day24(example).partOne()).isEqualTo(18)
-        }
-
-        @Test
-        fun `2What is the fewest number of minutes required to avoid the blizzards and reach the goal`() {
-            val example = """
-                #.#####
-                #...^.#
-                #..<..#
-                #.....#
-                #.....#
-                #.....#
-                #####.#""".trimIndent().lines()
-
-            assertThat(Day24(example).partOne()).isEqualTo(18)
-        }
 
         @Test
         fun `Move test`() {
@@ -74,7 +46,7 @@ class Day24Test {
     inner class Part2 {
 
         @Test
-        fun `What is the number of the first round where no Elf moves`() {
+        fun `What is the fewest number of minutes required to reach the goal, go back to the start, then reach the goal again`() {
             assertThat(Day24(example).partTwo()).isEqualTo(54)
         }
     }
