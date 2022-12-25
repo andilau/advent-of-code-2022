@@ -56,12 +56,11 @@ class Day24(input: List<String>) : Puzzle {
 
             if (route.last() == exit && remains.isEmpty()) return route
             if (route.last() == exit && remains.isNotEmpty()) {
-                exit = remains.removeAt(0)
+                exit = remains.removeFirst()
                 queue.clear()
                 //seen.clear()
                 println("exit = $exit $remains -> ${route.size}")
             }
-
 
             val time = route.size // 1
             val wall = obstacles[time % ((max.x - 2) * (max.y - 2))]

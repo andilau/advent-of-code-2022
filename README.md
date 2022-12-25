@@ -37,6 +37,8 @@ by [Eric Wastl](http://was.tl/).
   -- [Day18.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day18.kt)
 - Day 23: 🌱 [Unstable Diffusion](https://adventofcode.com/2022/day/23)
   -- [Day23.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day23.kt)
+- Day 24: 🌨 [Blizzard Basin](https://adventofcode.com/2022/day/24)
+  -- [Day24.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day24.kt)
 
 ### Features
 
