@@ -26,6 +26,7 @@ class Day24(input: List<String>) : Puzzle {
     private val blizzardsSouth = input.extract('v')
 
     private val obstacles = ConcurrentHashMap<Int, Set<Point>>()
+
     override fun partOne() = solve(listOf(start), exit).lastIndex
 
     override fun partTwo() = solve(solve(solve(listOf(start), exit), start), exit).lastIndex
@@ -52,13 +53,11 @@ class Day24(input: List<String>) : Puzzle {
         error("Path not found")
     }
 
-    private fun computeObstacles(time: Int): Set<Point> {
-        val moveW = blizzardsWest.move(time, WEST, max)
-        val moveE = blizzardsEast.move(time, EAST, max)
-        val moveN = blizzardsNorth.move(time, NORTH, max)
-        val moveS = blizzardsSouth.move(time, SOUTH, max)
-        return walls + moveW + moveE + moveN + moveS
-    }
+    private fun computeObstacles(time: Int): Set<Point> =
+        walls + blizzardsWest.move(time, WEST, max) +
+                blizzardsEast.move(time, EAST, max) +
+                blizzardsNorth.move(time, NORTH, max) +
+                blizzardsSouth.move(time, SOUTH, max)
 
     private fun Set<Point>.move(round: Int, vector: Point, max: Point) =
         map { it + round * vector }
