@@ -4,7 +4,7 @@ import days.Point.Companion.EAST
 import days.Point.Companion.NORTH
 import days.Point.Companion.SOUTH
 import days.Point.Companion.WEST
-import kotlin.collections.ArrayDeque
+import java.util.concurrent.ConcurrentHashMap
 
 @AdventOfCodePuzzle(
     name = "Blizzard Basin",
@@ -12,63 +12,42 @@ import kotlin.collections.ArrayDeque
     date = Date(day = 24, year = 2022)
 )
 class Day24(input: List<String>) : Puzzle {
-
     private val walls = input.extract('#')
     private val max = Point(walls.maxOf { it.x }, walls.maxOf { it.y })
-    private val start = point(0) ?: error("No start found")
-    private val exit = point(max.y) ?: error("No exit found")
+    private val cycles = (max.x - 1) * (max.y - 1)
+    private val start = openingsIn(0) ?: error("No start found")
 
-    private fun point(y: Int) = (0..max.x).map { x -> Point(x, y) }.firstOrNull() { it !in walls }
+    private val exit = openingsIn(max.y) ?: error("No exit found")
 
+    private fun openingsIn(y: Int) = (0..max.x).map { x -> Point(x, y) }.firstOrNull { it !in walls }
     private val blizzardsWest = input.extract('<')
     private val blizzardsEast = input.extract('>')
     private val blizzardsNorth = input.extract('^')
     private val blizzardsSouth = input.extract('v')
 
-    private fun Set<Point>.move(round: Int, vector: Point, max: Point) =
-        map { it + round * vector }
-            .map { Point((it.x - 1).mod(max.x - 1) + 1, (it.y - 1).mod(max.y - 1) + 1) }
-            .toSet()
+    private val obstacles = ConcurrentHashMap<Int, Set<Point>>()
+    override fun partOne() = solve(listOf(start), exit).lastIndex
 
-    private val obstacles = List((max.x - 2) * (max.y - 2), ::computeObstacles)
+    override fun partTwo() = solve(solve(solve(listOf(start), exit), start), exit).lastIndex
 
-    override fun partOne() = partOne(listOf(exit)).also { println(it) }.lastIndex
+    private fun solve(path: List<Point>, goal: Point): List<Point> {
+        data class State(val current: Point, val time: Int)
 
-    override fun partTwo() = partOne(listOf(exit, start, exit)).lastIndex
-
-    fun partOne(dest: List<Point>): List<Point> {
-        data class State(val current: Point, val time: Int, val rem: List<Point>)
-
-        val remains = dest.toMutableList()
-        var exit = remains.removeAt(0)
-
-        val queue = ArrayDeque<List<Point>>() //{ a, b ->
-            .apply { add(listOf(start)) }
-
-        //walls.draw(blizzardsWest, blizzardsEast, blizzardsNorth, blizzardsSouth)
+        val queue = ArrayDeque<List<Point>>().apply { add(path) }
         val seen = mutableSetOf<State>()
         while (queue.isNotEmpty()) {
             val route: List<Point> = queue.removeFirst()
+            if (route.last() == goal) return route
 
-            val state = State(route.last(), route.size % ((max.x - 2) * (max.y - 2)), remains)
+            val state = State(route.last(), route.size % cycles)
             if (state in seen) continue
             seen += state
 
-            if (route.last() == exit && remains.isEmpty()) return route
-            if (route.last() == exit && remains.isNotEmpty()) {
-                exit = remains.removeFirst()
-                queue.clear()
-                //seen.clear()
-                println("exit = $exit $remains -> ${route.size}")
-            }
-
-            val time = route.size // 1
-            val wall = obstacles[time % ((max.x - 2) * (max.y - 2))]
-
+            val obstacle = obstacles.getOrPut(route.size % cycles) { computeObstacles(route.size) }
             route.last().neighboursAndSelf()
                 .filter { it.y in 0..max.y }
-                .filter { it !in wall }
-                .forEach { queue.add(route + it) }
+                .filter { it !in obstacle }
+                .forEach { queue += (route + it) }
         }
         error("Path not found")
     }
@@ -81,17 +60,8 @@ class Day24(input: List<String>) : Puzzle {
         return walls + moveW + moveE + moveN + moveS
     }
 
-    private fun Set<Point>.draw(west: Set<Point>, east: Set<Point>, north: Set<Point>, south: Set<Point>) {
-        (minOf { it.y }..maxOf { it.y }).forEach { y ->
-            (minOf { it.x }..maxOf { it.x }).map { x ->
-                if (Point(x, y) in west) '<'
-                else if (Point(x, y) in east) '>'
-                else if (Point(x, y) in north) '^'
-                else if (Point(x, y) in south) 'v'
-                else if (Point(x, y) in this) '#'
-                else '.'
-            }.joinToString("")
-                .also { println(it) }
-        }
-    }
+    private fun Set<Point>.move(round: Int, vector: Point, max: Point) =
+        map { it + round * vector }
+            .map { Point((it.x - 1).mod(max.x - 1) + 1, (it.y - 1).mod(max.y - 1) + 1) }
+            .toSet()
 }

@@ -32,11 +32,11 @@ data class Point(val x: Int, val y: Int) {
     val east: Point get() = this + Point(1, 0)
 
     fun neighboursAndSelf(): Set<Point> = setOf(
-        copy(),
         copy(x = x + 1),
         copy(y = y + 1),
         copy(x = x - 1),
         copy(y = y - 1),
+        copy(),
     )
 
     fun neighbours() = setOf(
