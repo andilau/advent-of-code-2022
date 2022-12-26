@@ -13,9 +13,9 @@ fun gcd(a: Long, b: Long): Long {
     return gcd(b, a % b)
 }
 
-fun neighborsAndSelf(x: Int, y: Int) =
-    (x..y).flatMap { dy ->
-        (x..y).map { dx ->
+fun pairs(intRange: IntRange): List<Pair<Int, Int>> =
+    intRange.flatMap { dy ->
+        intRange.map { dx ->
             Pair(dx, dy)
         }
     }
@@ -30,6 +30,14 @@ data class Point(val x: Int, val y: Int) {
     val southeast: Point get() = this + Point(1, 1)
     val west: Point get() = this + Point(-1, 0)
     val east: Point get() = this + Point(1, 0)
+
+    fun neighboursAndSelf(): Set<Point> = setOf(
+        copy(x = x + 1),
+        copy(y = y + 1),
+        copy(x = x - 1),
+        copy(y = y - 1),
+        copy(),
+    )
 
     fun neighbours() = setOf(
         copy(x = x + 1),
@@ -60,17 +68,27 @@ data class Point(val x: Int, val y: Int) {
     }
 
     operator fun plus(other: Point) = Point(x + other.x, y + other.y)
+    operator fun minus(other: Point) = Point(x - other.x, y - other.y)
+    operator fun times(value: Int) = Point(x * value, y * value)
+
     override fun toString(): String {
         return "P($x,$y)"
     }
 
     companion object {
+        val WEST = Point(-1, 0)
+        val EAST = Point(1, 0)
+        val NORTH = Point(0, -1)
+        val SOUTH = Point(0, 1)
+
         fun from(line: String) = line
             .split(",")
             .map(String::toInt)
             .let { (x, y) -> Point(x, y) }
     }
 }
+
+operator fun Int.times(vector: Point) = vector.times(this)
 
 fun List<String>.extract(char: Char): Set<Point> {
     return this.flatMapIndexed() { y, row -> row.mapIndexedNotNull { x, c -> if (c == char) Point(x, y) else null } }
