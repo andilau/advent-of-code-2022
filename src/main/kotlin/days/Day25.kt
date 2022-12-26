@@ -24,7 +24,7 @@ class Day25(val input: List<String>) : Puzzle {
             return answer
         }
 
-        private fun Long.toSnafu() = toSnafuNumber(this).toList().reversed().joinToString("")
+        private fun Long.toSnafu() = toSnafuNumber(this).toList().joinToString("")
 
         fun toSnafuNumber(number: Long) = number.decimalToSnafuReversed().toList().reversed().joinToString("")
 
