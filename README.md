@@ -39,6 +39,8 @@ by [Eric Wastl](http://was.tl/).
   -- [Day23.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day23.kt)
 - Day 24: 🌨 [Blizzard Basin](https://adventofcode.com/2022/day/24)
   -- [Day24.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day24.kt)
+- Day 25: 💯 [Full of Hot Air](https://adventofcode.com/2022/day/25)
+  -- [Day25.kt](https://github.com/andilau/advent-of-code-2022/blob/main/src/main/kotlin/days/Day25.kt)
 
 ### Features
 
