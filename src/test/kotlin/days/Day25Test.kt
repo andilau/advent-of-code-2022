@@ -60,7 +60,7 @@ class Day25Test {
 
         @Test
         fun `What SNAFU number do you supply to Bob's console`() {
-            assertThat(Day25(snafuNumbers).partOne()).isEqualTo("0=1-=2")
+            assertThat(Day25(snafuNumbers).partOne()).isEqualTo("2=-1=0")
         }
     }
 
