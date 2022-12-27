@@ -1,12 +1,14 @@
 package days
 
+import days.Day25.Companion.toDecimal
+import days.Day25.Companion.toSnafu
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.*
 
 @DisplayName("Day 25")
 class Day25Test {
 
-    private val decToSnafu = """
+    private val decimalToSnafu = """
     1              1
     2              2
     3             1=
@@ -24,18 +26,18 @@ class Day25Test {
     314159265  1121-1110-1=0""".trimIndent().lines().map { it.split(Regex("""\s+""")) }
 
     @TestFactory
-    fun decimalToSnafu(): List<DynamicTest> = decToSnafu
+    fun decimalToSnafu(): List<DynamicTest> = decimalToSnafu
         .map { (decimal, snafu) ->
             DynamicTest.dynamicTest("Test: $decimal -> $snafu") {
-                assertThat(Day25.toSnafuNumber(decimal.toLong())).isEqualTo(snafu)
+                assertThat(decimal.toLong().toSnafu()).isEqualTo(snafu)
             }
         }
 
     @TestFactory
-    fun snafuToDecimal(): List<DynamicTest> = decToSnafu
+    fun snafuToDecimal(): List<DynamicTest> = decimalToSnafu
         .map { (decimal, snafu) ->
             DynamicTest.dynamicTest("Test: $snafu -> $decimal") {
-                assertThat(Day25.snafuToDecimal(snafu)).isEqualTo(decimal.toLong())
+                assertThat(snafu.toDecimal()).isEqualTo(decimal.toLong())
             }
         }
 

@@ -9,24 +9,19 @@ import kotlin.math.pow
 )
 class Day25(val input: List<String>) : Puzzle {
 
-    override fun partOne() = input.sumOf(::snafuToDecimal).toSnafu()
+    override fun partOne() = input.sumOf { it.toDecimal() }.toSnafu()
 
     override fun partTwo() = Unit
 
     companion object {
 
-        fun snafuToDecimal(snafu: String): Long {
-            var answer = 0L
-            snafu.reversed().mapIndexed { ix, char ->
-                val decoded = DECODING[char] ?: error("Unknown char: $char")
-                answer += 5.0.pow(ix).toLong() * decoded
+        fun String.toDecimal(): Long {
+            return reversed().foldIndexed(0L) { ix, sum, char ->
+                sum + 5.0.pow(ix).toLong() * (DECODING[char] ?: error("Unknown char: $char"))
             }
-            return answer
         }
 
-        private fun Long.toSnafu() = toSnafuNumber(this).toList().joinToString("")
-
-        fun toSnafuNumber(number: Long) = number.decimalToSnafuReversed().toList().reversed().joinToString("")
+        fun Long.toSnafu() = this.decimalToSnafuReversed().joinToString("").reversed()
 
         private fun Long.decimalToSnafuReversed() = sequence {
             var number = this@decimalToSnafuReversed
