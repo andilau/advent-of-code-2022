@@ -35,14 +35,18 @@ class Day13Test {
     @DisplayName("Part 1")
     inner class Part1 {
 
-        @Test
-        fun `What is the sum of the indices of first pair`() {
-            assertThat(Day13(map.take(3)).partOne()).isEqualTo(1)
+        @TestFactory
+        fun `Pair is in the right order`(): List<DynamicTest> = listOf(0, 1, 3, 5).map { index ->
+            DynamicTest.dynamicTest("Pair ${index + 1} is in the right order") {
+                assertThat(Day13(map.drop(3 * index).take(3)).partOne()).isEqualTo(1)
+            }
         }
 
-        @Test
-        fun `What is the sum of the indices of second pair`() {
-            assertThat(Day13(map.drop(3).take(3)).partOne()).isEqualTo(1)
+        @TestFactory
+        fun `Pair is not in the right order`(): List<DynamicTest> = listOf(2, 4, 6, 7).map { index ->
+            DynamicTest.dynamicTest("Pair ${index + 1} is not in the right order") {
+                assertThat(Day13(map.drop(3 * index).take(3)).partOne()).isEqualTo(0)
+            }
         }
     }
 
@@ -51,8 +55,8 @@ class Day13Test {
     inner class Part2 {
 
         @Test
-        fun `What is the fewest steps required to move starting from any square with elevation a to the location that should get the best signal`() {
-            assertThat(Day13(map).partTwo()).isEqualTo(29)
+        fun `Determine the indices of the two divider packets and multiply them together`() {
+            assertThat(Day13(map).partTwo()).isEqualTo(140)
         }
     }
 }

@@ -6,6 +6,7 @@ package days
     date = Date(day = 13, year = 2022)
 )
 class Day13(val input: List<String>) : Puzzle {
+    private val divider: List<String> = listOf("[[2]]", "[[6]]")
 
     private val pairs = input
         .asSequence().filter(String::isNotBlank)
@@ -22,14 +23,12 @@ class Day13(val input: List<String>) : Puzzle {
             .filter(String::isNotBlank)
             .map { Packet.from(it) }
             .sorted()
-            .also { println(it) }
             .mapIndexed { index, packet ->
                 if (packet.toString() in divider) index + 1 else 1
             }
             .reduce { a, b -> a * b }
     }
 
-    private val divider get() = listOf("[[2]]", "[[6]]")
 
     sealed class Packet : Comparable<Packet> {
 
