@@ -7,18 +7,30 @@ package days
 )
 class Day13(val input: List<String>) : Puzzle {
 
-    private val pairs = input.filter(String::isNotBlank)
+    private val pairs = input
+        .asSequence().filter(String::isNotBlank)
         .map { line -> Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList() }
+        .map { ArrayDeque(it) }
+        .map { Packet.from(it) }
         .chunked(2)
-        .map { Packet.from(it[0]) to Packet.from(it[1]) }
+        .map { it[0] to it[1] }
 
-    override fun partOne(): Int {
-        return pairs.mapIndexed { ix, p -> (ix + 1) * if (p.first < p.second) 1 else 0 }.sum()
-    }
+    override fun partOne(): Int =
+        pairs.mapIndexed { ix, p -> (ix + 1) * if (p.first < p.second) 1 else 0 }
+            .sum()
 
     override fun partTwo(): Int {
-        return 0
+        return (input + listOf("[[2]]", "[[6]]")).asSequence()
+            .filter(String::isNotBlank)
+            .map { line -> Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList() }
+            .map { ArrayDeque(it) }
+            .map { Packet.from(it) }
+            .sorted()
+            .filterIndexed { index, packet -> packet.toString() == "[[2]]" || packet.toString == "[[6]]" }
+            .take(2)
+            .reduce { a, b -> (a + 1) * (b + 1) }
     }
+
 
     sealed class Packet : Comparable<Packet> {
 
@@ -40,18 +52,18 @@ class Day13(val input: List<String>) : Puzzle {
         }
 
         companion object {
-            fun from(line: List<String>): Packet {
+            fun from(tokens: ArrayDeque<String>): Packet {
                 val packets = mutableListOf<Packet>()
-                for (token in line) {
-                    when (token) {
+                println("packets = $packets")
+                while (tokens.isNotEmpty()) {
+                    when (val symbol = tokens.removeFirst()) {
                         "]" -> return PacketList(packets)
-                        "[" -> packets.add(from(line))
-                        else -> packets.add(PacketNumber(token.toInt()))
+                        "[" -> packets.add(from(tokens))
+                        else -> packets.add(PacketNumber(symbol.toInt()))
                     }
                 }
                 return packets.first()
             }
         }
     }
-
 }
