@@ -9,8 +9,6 @@ class Day13(val input: List<String>) : Puzzle {
 
     private val pairs = input
         .asSequence().filter(String::isNotBlank)
-        .map { line -> Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList() }
-        .map { ArrayDeque(it) }
         .map { Packet.from(it) }
         .chunked(2)
         .map { it[0] to it[1] }
@@ -20,17 +18,18 @@ class Day13(val input: List<String>) : Puzzle {
             .sum()
 
     override fun partTwo(): Int {
-        return (input + listOf("[[2]]", "[[6]]")).asSequence()
+        return (input + divider)
             .filter(String::isNotBlank)
-            .map { line -> Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList() }
-            .map { ArrayDeque(it) }
             .map { Packet.from(it) }
             .sorted()
-            .filterIndexed { index, packet -> packet.toString() == "[[2]]" || packet.toString == "[[6]]" }
-            .take(2)
-            .reduce { a, b -> (a + 1) * (b + 1) }
+            .also { println(it) }
+            .mapIndexed { index, packet ->
+                if (packet.toString() in divider) index + 1 else 1
+            }
+            .reduce { a, b -> a * b }
     }
 
+    private val divider get() = listOf("[[2]]", "[[6]]")
 
     sealed class Packet : Comparable<Packet> {
 
@@ -39,6 +38,8 @@ class Day13(val input: List<String>) : Puzzle {
                 is PacketNumber -> number.compareTo(other.number)
                 is PacketList -> PacketList(listOf(this)).compareTo(other)
             }
+
+            override fun toString(): String = "$number"
         }
 
         class PacketList(val packets: List<Packet>) : Packet() {
@@ -49,12 +50,17 @@ class Day13(val input: List<String>) : Puzzle {
                     .firstOrNull { it != 0 }
                     ?: this.packets.size.compareTo(other.packets.size)
             }
+
+            override fun toString(): String =
+                packets.joinToString(",", "[", "]")
         }
 
         companion object {
-            fun from(tokens: ArrayDeque<String>): Packet {
+            fun from(line: String): Packet =
+                Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList().let { from(ArrayDeque(it)) }
+
+            private fun from(tokens: ArrayDeque<String>): Packet {
                 val packets = mutableListOf<Packet>()
-                println("packets = $packets")
                 while (tokens.isNotEmpty()) {
                     when (val symbol = tokens.removeFirst()) {
                         "]" -> return PacketList(packets)
