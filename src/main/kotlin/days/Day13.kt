@@ -7,7 +7,10 @@ package days
 )
 class Day13(val input: List<String>) : Puzzle {
 
-    private val pairs = input.chunked(3).map { it[0] to it[1] }
+    private val pairs = input.filter(String::isNotBlank)
+        .map { line -> Regex("""\[|]|\d+""").findAll(line).map { it.value }.toList() }
+        .chunked(2)
+        .map { Packet.from(it[0]) to Packet.from(it[1]) }
 
     override fun partOne(): Int {
         return pairs.mapIndexed { ix, p -> (ix + 1) * if (p.first < p.second) 1 else 0 }.sum()
@@ -17,13 +20,38 @@ class Day13(val input: List<String>) : Puzzle {
         return 0
     }
 
-    data class Packet(val content: List<Int>) {
-        companion object {
-            fun from(line: String) =
-                if (line[0] == '[')
-                    line.removePrefix("[").removeSuffix("]").split(",").map(String::toInt).let { Packet(it) }
-                else TODO()
+    sealed class Packet : Comparable<Packet> {
 
+        class PacketNumber(val number: Int) : Packet() {
+            override fun compareTo(other: Packet): Int = when (other) {
+                is PacketNumber -> number.compareTo(other.number)
+                is PacketList -> PacketList(listOf(this)).compareTo(other)
+            }
+        }
+
+        class PacketList(val packets: List<Packet>) : Packet() {
+            override fun compareTo(other: Packet): Int = when (other) {
+                is PacketNumber -> this.compareTo(PacketList(listOf(other)))
+                is PacketList -> packets.zip(other.packets)
+                    .map { (first, second) -> first.compareTo(second) }
+                    .firstOrNull { it != 0 }
+                    ?: this.packets.size.compareTo(other.packets.size)
+            }
+        }
+
+        companion object {
+            fun from(line: List<String>): Packet {
+                val packets = mutableListOf<Packet>()
+                for (token in line) {
+                    when (token) {
+                        "]" -> return PacketList(packets)
+                        "[" -> packets.add(from(line))
+                        else -> packets.add(PacketNumber(token.toInt()))
+                    }
+                }
+                return packets.first()
+            }
         }
     }
+
 }
