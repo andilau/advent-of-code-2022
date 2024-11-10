@@ -12,7 +12,7 @@ on:
     branches: [ master, main ]
 
 jobs:
-  gradle:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm") version "2.0.21"
 }
 
 application {
@@ -26,12 +26,16 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs = listOf("-Xjsr305=strict")
+kotlin {
+    jvmToolchain(17)
+}
+
+tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjsr305=strict")
     }
-    test {
-        useJUnitPlatform()
-    }
+}
+
+tasks.named("test", Test::class) {
+    useJUnitPlatform()
 }
