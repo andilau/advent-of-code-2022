@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "2.1.0"
 }
 
 application {
@@ -18,20 +18,24 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.reflections:reflections:0.10.2")
-    implementation("org.slf4j:slf4j-nop:2.0.6")
+    implementation("org.slf4j:slf4j-nop:2.0.16")
 
-    testApi("org.junit.jupiter:junit-jupiter-engine:5.9.1")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testApi("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+    testImplementation("org.assertj:assertj-core:3.26.3")
 }
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs = listOf("-Xjsr305=strict")
+kotlin {
+    jvmToolchain(17)
+}
+
+tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
+    compilerOptions {
+        freeCompilerArgs.add("-Xjsr305=strict")
     }
-    test {
-        useJUnitPlatform()
-    }
+}
+
+tasks.named("test", Test::class) {
+    useJUnitPlatform()
 }
