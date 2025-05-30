@@ -36,6 +36,10 @@ kotlin {
     }
 }
 
-tasks.named("test", Test::class) {
-    useJUnitPlatform()
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+        }
+    }
 }
