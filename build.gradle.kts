@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     application
     kotlin("jvm") version "2.1.0"
@@ -28,11 +26,13 @@ dependencies {
 
 kotlin {
     jvmToolchain(17)
-}
-
-tasks.named("compileKotlin", org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask::class.java) {
     compilerOptions {
-        freeCompilerArgs.add("-Xjsr305=strict")
+        freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+    }
+    sourceSets.all {
+        languageSettings {
+            languageVersion = "2.0"
+        }
     }
 }
 
